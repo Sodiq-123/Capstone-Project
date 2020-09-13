@@ -28,18 +28,33 @@ def get_filters(city, month, day):
     while True:
         time = input("Do you want to filter as month, day, all or none?: ").lower()               
         if time == 'month':
-            month = input("Which month? January, Feburary, March, April, May or June?: ").lower()
             day = 'all'
+            month = input("Which month? January, February, March, April, May or June?: ").lower()
+            for i in range(5):
+                if month not in ['january', 'february', 'march', 'april', 'may', 'june']:
+                    month = input('Invalid!, provide your choice of month again: ')
+                    continue
             break
                     
         elif time == 'day':
             month = 'all'
             day = input("Which day? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday or Sunday: ").lower()
+            for i in range(5):
+                if day not in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']:
+                    day = input('Invalid!, please provide your choice of day again')
+                    continue
             break
                     
         elif time == 'all':
-            month = input("Which month? January, Feburary, March, April, May or June?: ").lower()           
-            day = input("Which day? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday or Sunday: ").lower()
+            month = input("Which month? January, February, March, April, May or June?: ").lower()  
+            for i in range(5):
+                if month not in ['january', 'february', 'march', 'april', 'may', 'june']:
+                    month = input('Invalid, provide your choice of month again: ')
+                    continue
+                day = input("Which day? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday or Sunday: ").lower()
+                if day not in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']:
+                    day = input('Invalid!, please provide your choice of day again')
+                    continue
             break   
             
         elif time == 'none':
@@ -91,16 +106,16 @@ def time_stats(df):
 
     # display the most common month
     common_month = df['month'].mode()[0]
-    print(common_month)
+    print('Most Common Month: ', common_month)
 
     # display the most common day of week
     common_day_of_week = df['day_of_week'].mode()[0]
-    print(common_day_of_week)
+    print('\nMost Common Day of the week: ', common_day_of_week)
 
     # display the most common start hour
     df['hour'] = df['Start Time'].dt.hour
     commom_hour = df['hour'].mode()[0]
-    print(commom_hour)
+    print('\nMost Common Start Hour: ', commom_hour)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -114,16 +129,16 @@ def station_stats(df):
 
     # display most commonly used start station
     common_start = df['Start Station'].mode()[0]
-    print(common_start)
+    print('\nCommonly Used Start Station: ', common_start)
 
     # display most commonly used end station
     common_end = df['End Station'].mode()[0]
-    print(common_end)
+    print('\nCommonly Used Start Station: ', common_end)
 
     # display most frequent combination of start station and end station trip
     df['combination'] = df['Start Station'] + ' to ' + df['End Station']
     common_combination = df['combination'].mode()[0]
-    print(common_combination)
+    print('\nMost Frequent Start and End Station Combined: ', common_combination)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -137,11 +152,11 @@ def trip_duration_stats(df):
 
     # display total travel time
     total_travel = df['Trip Duration'].sum()
-    print(total_travel)
+    print('\nTotal Travel Time: ', total_travel)
 
     # display mean travel time
     mean_travel = df['Trip Duration'].mean()
-    print(mean_travel)
+    print('\nAverage Time Travel: ', mean_travel)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -155,21 +170,21 @@ def user_stats(df):
 
     # Display counts of user types
     user_types = df['User Type'].value_counts()
-    print(user_types)
+    print('\nCount of Users: ', user_types)
 
     # Display counts of gender
     gender = df['Gender'].value_counts()
-    print(gender)
+    print('\nGender Count: ', gender)
 
     # Display earliest, most recent, and most common year of birth
     earliest = df['Birth Year'].min()
-    print(earliest)
+    print('\nEarliest Birth Year: ', earliest)
 
     recent = df['Birth Year'].max()
-    print(recent)
+    print('\nMost Recent Year of Birth: ', recent)
 
     common_birth = df['Birth Year'].mode()[0]
-    print(common_birth)
+    print('\nCommon Year of Birth: ', common_birth)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
