@@ -1,6 +1,7 @@
 import time
 import pandas as pd
 import numpy as np
+import datetime
 
 CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
@@ -118,7 +119,7 @@ def time_stats(df):
     # display the most common start hour
     df['hour'] = df['Start Time'].dt.hour
     commom_hour = df['hour'].mode()[0]
-    print('\nMost Common Start Hour: ', pd.to_timedelta(commom_hour, unit='h'))
+    print('\nMost Common Start Hour: ', str(datetime.timedelta(seconds=float(commom_hour))))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -158,11 +159,11 @@ def trip_duration_stats(df):
     
     # display total travel time
     total_travel = df['Trip Duration'].sum()
-    print('\nTotal Travel Time: ', pd.to_timedelta(total_travel, unit='W'))
+    print('\nTotal Travel Time: ', str(datetime.timedelta(seconds=float(total_travel))))
 
     # display mean travel time
     mean_travel = df['Trip Duration'].mean()
-    print('\nAverage Time Travel: ', pd.to_timedelta(mean_travel, unit='W'))
+    print('\nAverage Time Travel: ', str(datetime.timedelta(seconds=float(mean_travel))))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
