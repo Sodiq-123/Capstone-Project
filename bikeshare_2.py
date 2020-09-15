@@ -41,7 +41,7 @@ def get_filters(city, month, day):
             day = input("Which day? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday or Sunday: ").lower()
             for i in range(5):
                 if day not in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']:
-                    day = input('Invalid!, please provide your choice of day again')
+                    day = input('Invalid!, please provide your choice of day again: ')
                     continue
             break
                     
@@ -53,7 +53,7 @@ def get_filters(city, month, day):
                     continue
                 day = input("Which day? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday or Sunday: ").lower()
                 if day not in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']:
-                    day = input('Invalid!, please provide your choice of day again')
+                    day = input('Invalid!, please provide your choice of day again: ')
                     continue
             break   
             
@@ -66,9 +66,9 @@ def get_filters(city, month, day):
             print('Invalid!!!. Kindly provide your input again')
             continue
         
-    print('City: ', city)
-    print('Month: ', month)
-    print('Day: ', day)
+    print('City: ', city.title())
+    print('Month: ', month.title())
+    print('Day: ', day.title())
     print('-'*40)
     return city, month, day
 
@@ -104,6 +104,9 @@ def time_stats(df):
     print('\nCalculating The Most Frequent Times of Travel...\n')
     start_time = time.time()
 
+    # Change the numbers to actual month
+    df['month'] = df['month'].map({1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June'})
+    
     # display the most common month
     common_month = df['month'].mode()[0]
     print('Most Common Month: ', common_month)
@@ -115,7 +118,7 @@ def time_stats(df):
     # display the most common start hour
     df['hour'] = df['Start Time'].dt.hour
     commom_hour = df['hour'].mode()[0]
-    print('\nMost Common Start Hour: ', commom_hour)
+    print('\nMost Common Start Hour: ', pd.to_timedelta(commom_hour, unit='h'))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -133,7 +136,7 @@ def station_stats(df):
 
     # display most commonly used end station
     common_end = df['End Station'].mode()[0]
-    print('\nCommonly Used Start Station: ', common_end)
+    print('\nCommonly Used End Station: ', common_end)
 
     # display most frequent combination of start station and end station trip
     df['combination'] = df['Start Station'] + ' to ' + df['End Station']
@@ -149,14 +152,17 @@ def trip_duration_stats(df):
 
     print('\nCalculating Trip Duration...\n')
     start_time = time.time()
-
+    
+    # converting the hour column 
+    
+    
     # display total travel time
     total_travel = df['Trip Duration'].sum()
-    print('\nTotal Travel Time: ', total_travel)
+    print('\nTotal Travel Time: ', pd.to_timedelta(total_travel, unit='W'))
 
     # display mean travel time
     mean_travel = df['Trip Duration'].mean()
-    print('\nAverage Time Travel: ', mean_travel)
+    print('\nAverage Time Travel: ', pd.to_timedelta(mean_travel, unit='W'))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -178,13 +184,13 @@ def user_stats(df):
 
     # Display earliest, most recent, and most common year of birth
     earliest = df['Birth Year'].min()
-    print('\nEarliest Birth Year: ', earliest)
+    print('\nEarliest Birth Year: ', int(earliest))
 
     recent = df['Birth Year'].max()
-    print('\nMost Recent Year of Birth: ', recent)
+    print('\nMost Recent Year of Birth: ', int(recent))
 
     common_birth = df['Birth Year'].mode()[0]
-    print('\nCommon Year of Birth: ', common_birth)
+    print('\nCommon Year of Birth: ', int(common_birth))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -221,7 +227,6 @@ def main():
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
             break
-
 
 if __name__ == "__main__":
 	main()
