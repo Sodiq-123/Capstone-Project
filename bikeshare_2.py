@@ -19,7 +19,7 @@ def get_filters(city, month, day):
     
     # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
     while True:
-        city = input("Write a city name: Chicago, New York City or Washington!: ").lower()
+        city = input("Enter the city you want to filter with: Chicago, New York City or Washington!: ").lower()
         if city not in CITY_DATA:
             print("\nInvalid answer\n")
             continue   
@@ -30,7 +30,7 @@ def get_filters(city, month, day):
         time = input("Do you want to filter as month, day, all or none?: ").lower()               
         if time == 'month':
             day = 'all'
-            month = input("Which month? January, February, March, April, May or June?: ").lower()
+            month = input("Which month do you want to filter with: January, February, March, April, May or June?: ").lower()
             for i in range(5):
                 if month not in ['january', 'february', 'march', 'april', 'may', 'june']:
                     month = input('Invalid!, provide your choice of month again: ')
@@ -39,7 +39,7 @@ def get_filters(city, month, day):
                     
         elif time == 'day':
             month = 'all'
-            day = input("Which day? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday or Sunday: ").lower()
+            day = input("Which day do you want to filter with: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday or Sunday: ").lower()
             for i in range(5):
                 if day not in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']:
                     day = input('Invalid!, please provide your choice of day again: ')
@@ -47,12 +47,12 @@ def get_filters(city, month, day):
             break
                     
         elif time == 'all':
-            month = input("Which month? January, February, March, April, May or June?: ").lower()  
+            month = input("Which month do you want to filter with: January, February, March, April, May or June?: ").lower()  
             for i in range(5):
                 if month not in ['january', 'february', 'march', 'april', 'may', 'june']:
                     month = input('Invalid, provide your choice of month again: ')
                     continue
-                day = input("Which day? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday or Sunday: ").lower()
+                day = input("Which day do you want to filter with: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday or Sunday: ").lower()
                 if day not in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']:
                     day = input('Invalid!, please provide your choice of day again: ')
                     continue
@@ -87,14 +87,14 @@ def load_data(city, month, day):
     df = pd.read_csv(CITY_DATA[city])
     df['Start Time'] = pd.to_datetime(df['Start Time'])
     df['month'] = df['Start Time'].dt.month
-    df['day_of_week'] = df['Start Time'].dt.day_name()
+    df['day of week'] = df['Start Time'].dt.day_name()
 
     if month != 'all':
-        months = ['january', 'february', 'march', 'april', 'may', 'june']
-        month = months.index(month) + 1
+        list_of_months = ['january', 'february', 'march', 'april', 'may', 'june']
+        month = list_of_months.index(month) + 1
         df = df[df['month'] == month]
     if day != 'all':
-        df = df[df['day_of_week'] == day.title()]
+        df = df[df['day of week'] == day.title()]
 
     return df
 
@@ -113,7 +113,7 @@ def time_stats(df):
     print('Most Common Month: ', common_month)
 
     # display the most common day of week
-    common_day_of_week = df['day_of_week'].mode()[0]
+    common_day_of_week = df['day of week'].mode()[0]
     print('\nMost Common Day of the week: ', common_day_of_week)
 
     # display the most common start hour
@@ -140,8 +140,8 @@ def station_stats(df):
     print('\nCommonly Used End Station: ', common_end)
 
     # display most frequent combination of start station and end station trip
-    df['combination'] = df['Start Station'] + ' to ' + df['End Station']
-    common_combination = df['combination'].mode()[0]
+    df['Start to End station'] = df['Start Station'] + ' To ' + df['End Station']
+    common_combination = df['Start to End station'].mode()[0]
     print('\nMost Frequent Start and End Station Combined: ', common_combination)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
@@ -215,7 +215,6 @@ def main():
     while True:
         city, month, day = get_filters(city, month, day)
         df = load_data(city, month, day)
-
         time_stats(df)
         station_stats(df)
         trip_duration_stats(df)
